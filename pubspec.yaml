@@ -90,6 +90,7 @@ flutter:
     - assets/images/patri.png
     - assets/images/zakazane.png
     - assets/images/nepatri.png
+    - assets/images/down.png
     - assets/images/
     - assets/icons/
     - assets/DB/papers/

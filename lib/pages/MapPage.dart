@@ -8,7 +8,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapPage extends StatefulWidget {
   final int selectedIndex;
-
   const MapPage({Key? key, required this.selectedIndex}) : super(key: key);
 
   @override
@@ -36,7 +35,7 @@ class _MapPageState extends State<MapPage> {
     if (now.isAfter(DateTime(2023, 4, 28)) &&
         now.isBefore(DateTime(2023, 4, 30))) {
       setState(() {
-        _containerAtLocation = true; 
+        _containerAtLocation = true;
       });
     } else {
       setState(() {

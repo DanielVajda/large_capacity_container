@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:large_capacity_container/pages/login_page.dart';
 import 'package:large_capacity_container/pages/rules.dart';
 import 'package:large_capacity_container/pages/schedule.dart';
 import 'package:large_capacity_container/pages/MapPage.dart';
@@ -22,6 +23,30 @@ class _HomePageState extends State<HomePage> {
         appBar: AppBar(
           elevation: 0,
           backgroundColor: Colors.transparent,
+          actions: [
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => LoginPage(
+                      selectedIndex: _selectedIndex,
+                    ),
+                  ),
+                );
+              },
+              child: Container(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 15,
+                ),
+                decoration: BoxDecoration(
+                  color: Color.fromRGBO(129, 195, 64, 1),
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                child: Icon(Icons.person),
+              ),
+            ),
+          ],
         ),
         bottomNavigationBar: Container(
           color: Colors.white,

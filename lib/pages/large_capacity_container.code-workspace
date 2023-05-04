@@ -1,0 +1,12 @@
+{
+	"folders": [
+		{
+			"path": "../.."
+		}
+	],
+	"settings": {
+		"FSharp.suggestGitignore": false,
+		"java.configuration.updateBuildConfiguration": "interactive",
+		"git.ignoreLimitWarning": true
+	}
+}
