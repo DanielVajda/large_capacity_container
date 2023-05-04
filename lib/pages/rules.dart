@@ -155,7 +155,7 @@ class _RulesState extends State<Rules> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Expanded(
-                      child: Image.asset("lib/images/patri.png"),
+                      child: Image.asset("assets/images/patri.png"),
                     ),
                     Text(
                       'Patrí',
@@ -194,7 +194,7 @@ class _RulesState extends State<Rules> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Expanded(
-                      child: Image.asset("lib/images/nepatri.png"),
+                      child: Image.asset("assets/images/nepatri.png"),
                     ),
                     Text(
                       'Nepatrí',
@@ -233,7 +233,7 @@ class _RulesState extends State<Rules> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Expanded(
-                      child: Image.asset("lib/images/zakazane.png"),
+                      child: Image.asset("assets/images/zakazane.png"),
                     ),
                     Text(
                       'Zakazané',

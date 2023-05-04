@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "760382909707",
+    "project_id": "largecapacitycontainer",
+    "storage_bucket": "largecapacitycontainer.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:760382909707:android:dfa2b9990005d9fc43060e",
+        "android_client_info": {
+          "package_name": "com.example.large_capacity_container"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "760382909707-204or067i9hntvffs4ji62nv32raadd4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBjs8vzybECIOcTs5jT2Lom2ZGJPlRYF-Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "760382909707-204or067i9hntvffs4ji62nv32raadd4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "760382909707-4vnb6mjkladbeqgcp7iv2nuh6d7bumo9.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.largeCapacityContainer"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

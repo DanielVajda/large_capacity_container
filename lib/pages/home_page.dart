@@ -126,7 +126,7 @@ class _HomePageState extends State<HomePage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Image.asset(
-                      'lib/images/logo.png',
+                      'assets/images/logo.png',
                     ),
                   ],
                 ),
