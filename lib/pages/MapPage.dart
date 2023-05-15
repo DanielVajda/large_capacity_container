@@ -5,174 +5,100 @@ import 'package:large_capacity_container/pages/rules.dart';
 import 'package:large_capacity_container/pages/schedule.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
+import 'dart:async';
+
 
 class MapPage extends StatefulWidget {
   final int selectedIndex;
   const MapPage({Key? key, required this.selectedIndex}) : super(key: key);
 
   @override
-  _MapPageState createState() => _MapPageState();
+  State<MapPage> createState() => MapPageState();
 }
 
-class _MapPageState extends State<MapPage> {
-  final LatLng containerLocation =
-      LatLng(48.724361, 21.262420); // Example location
-  late GoogleMapController _mapController;
+class MapPageState extends State<MapPage> {
+  final Completer<GoogleMapController> _controller =
+      Completer<GoogleMapController>();
+  LatLng? _latLng = LatLng(48.716385, 21.261074);
   bool _containerAtLocation = false;
   int _selectedIndex = 2;
+
+  CameraPosition _kGooglePlex = CameraPosition(
+    target: LatLng(48.716385, 21.261074),
+    zoom: 14.4746,
+  );
+
+  Future<void> getCurrentLocation() async {
+    Location location = Location();
+
+    bool _serviceEnabled;
+    PermissionStatus _permissionGranted;
+    LocationData _locationData;
+
+    _serviceEnabled = await location.serviceEnabled();
+    if (!_serviceEnabled) {
+      _serviceEnabled = await location.requestService();
+      if (!_serviceEnabled) {
+        return;
+      }
+    }
+
+    _permissionGranted = await location.hasPermission();
+    if (_permissionGranted == PermissionStatus.denied) {
+      _permissionGranted = await location.requestPermission();
+      if (_permissionGranted != PermissionStatus.granted) {
+        return;
+      }
+    }
+
+    _locationData = await location.getLocation();
+
+    _latLng = LatLng(_locationData.latitude!, _locationData.longitude!);
+    print(_latLng);
+
+    _kGooglePlex = CameraPosition(
+      target: _latLng!,
+      zoom: 14.4746,
+    );
+
+    await Future.delayed(const Duration(seconds: 1));
+    final GoogleMapController controller = await _controller.future;
+    setState(() {
+      controller.animateCamera(CameraUpdate.newCameraPosition(_kGooglePlex));
+    });
+  }
 
   @override
   void initState() {
     super.initState();
     _selectedIndex = widget.selectedIndex;
-    _updateContainerLocation();
-  }
-
-  void _updateContainerLocation() {
-    // Get the current date
-    DateTime now = DateTime.now();
-    // Check if the container is currently at the scheduled location
-    if (now.isAfter(DateTime(2023, 4, 28)) &&
-        now.isBefore(DateTime(2023, 4, 30))) {
-      setState(() {
-        _containerAtLocation = true;
-      });
-    } else {
-      setState(() {
-        _containerAtLocation = false;
-      });
-    }
-    // Schedule the next update in 1 minute
-    Future.delayed(Duration(minutes: 1), () => _updateContainerLocation());
+    getCurrentLocation();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context, _selectedIndex);
+    return SafeArea(
+      child: Scaffold(
+        body: GoogleMap(
+          mapType: MapType.normal,
+          initialCameraPosition: _kGooglePlex,
+          markers: <Marker>{_setMarker()},
+          myLocationButtonEnabled: true,
+          myLocationEnabled: true,
+          onMapCreated: (GoogleMapController controller) {
+            _controller.complete(controller);
           },
         ),
       ),
-      bottomNavigationBar: Container(
-        color: Colors.white,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 20),
-          child: GNav(
-            backgroundColor: Colors.white,
-            color: Colors.black,
-            activeColor: Colors.black,
-            selectedIndex: _selectedIndex,
-            onTabChange: (index) {
-              setState(() {
-                _selectedIndex = index;
-              });
-            },
-            tabBackgroundColor: Color.fromRGBO(129, 195, 64, 1),
-            gap: 8,
-            padding: EdgeInsets.all(16),
-            tabs: [
-              GButton(
-                icon: Icons.home,
-                text: 'Domov',
-                onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => HomePage()),
-                  ).then((value) {
-                    // This code will be executed when the Home screen is popped
-                    setState(() {
-                      _selectedIndex = 0;
-                    });
-                  });
-                },
-              ),
-              GButton(
-                icon: Icons.rule,
-                text: 'Pravidlá',
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          Rules(selectedIndex: _selectedIndex),
-                    ),
-                  ).then((value) {
-                    if (value != null) {
-                      setState(() {
-                        _selectedIndex = value;
-                      });
-                    }
-                  });
-                },
-              ),
-              GButton(
-                icon: Icons.map,
-                text: 'Mapa',
-                onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          MapPage(selectedIndex: _selectedIndex),
-                    ),
-                  ).then((value) {
-                    // This code will be executed when the Map screen is popped
-                    setState(() {
-                      _selectedIndex = 2;
-                    });
-                  });
-                },
-              ),
-              GButton(
-                icon: Icons.event,
-                text: 'Harmonogram',
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          Schedule(selectedIndex: _selectedIndex),
-                    ),
-                  ).then((value) {
-                    if (value != null) {
-                      setState(() {
-                        _selectedIndex = value;
-                      });
-                    }
-                  });
-                },
-              ),
-            ],
-          ),
-        ),
-      ),
-      body: GoogleMap(
-        initialCameraPosition: CameraPosition(
-          target: containerLocation,
-          zoom: 15,
-        ),
-        markers: {
-          Marker(
-            markerId: MarkerId("container"),
-            position: containerLocation,
-            icon: _containerAtLocation
-                ? BitmapDescriptor.defaultMarkerWithHue(
-                    BitmapDescriptor.hueGreen)
-                : BitmapDescriptor.defaultMarkerWithHue(
-                    BitmapDescriptor.hueRed),
-          ),
-        },
-        onMapCreated: (controller) {
-          _mapController = controller;
-        },
-      ),
+    );
+  }
+
+  _setMarker() {
+    return Marker(
+      markerId: MarkerId("marker_1"),
+      icon: BitmapDescriptor.defaultMarker,
+      position: _latLng!,
     );
   }
 }
